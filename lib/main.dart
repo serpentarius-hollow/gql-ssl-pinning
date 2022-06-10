@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> _gqlHit() async {
+  Future<void> _gqlCall() async {
     try {
       final secureClient = GetIt.I<Service>().gqlClient;
       final options = QueryOptions(
@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> _apiHit() async {
+  Future<void> _apiCall() async {
     try {
       final url = Uri.parse('https://core.setoko-test.com/ping');
 
@@ -99,11 +99,11 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: _gqlHit,
+              onPressed: _gqlCall,
               child: const Text('GQL Hit!'),
             ),
             ElevatedButton(
-              onPressed: _apiHit,
+              onPressed: _apiCall,
               child: const Text('API Hit!'),
             ),
           ],
