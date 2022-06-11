@@ -114,7 +114,7 @@ packages:
     source: hosted
     version: "0.6.8"
   dio:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: dio
       url: "https://pub.dartlang.org"
@@ -191,6 +191,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  gql_dio_link:
+    dependency: "direct dev"
+    description:
+      name: gql_dio_link
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.2"
   gql_error_link:
     dependency: transitive
     description:

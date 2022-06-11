@@ -1,46 +1,31 @@
-// import 'dart:io';
-
-// import 'package:flutter/services.dart';
+import 'package:dio/dio.dart';
+import 'package:gql_dio_link/gql_dio_link.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-// import 'package:http/io_client.dart';
 import 'package:http_certificate_pinning/http_certificate_pinning.dart';
 
-/// Using certificate
 class Service {
-  // final ByteData _certData;
   final List<String> _allowedSHAFingerprints;
 
-  late GraphQLClient _gqlClient;
-  GraphQLClient get gqlClient => _gqlClient;
+  late GraphQLClient _secureGqlClient;
+  GraphQLClient get secureGqlClient => _secureGqlClient;
 
-  // late IOClient _httpClient;
-  // IOClient get httpClient => _httpClient;
-
-  late SecureHttpClient _secureHttpClient;
-  SecureHttpClient get secureHttpClient => _secureHttpClient;
+  late Dio _secureDioClient;
+  Dio get secureDioClient => _secureDioClient;
 
   Service(this._allowedSHAFingerprints) {
-    // This is useless
-    // SecurityContext context = SecurityContext.defaultContext;
-    // context.setTrustedCertificatesBytes(_certData.buffer.asUint8List());
-    // final http = HttpClient(context: context);
+    _secureDioClient = Dio(BaseOptions(baseUrl: 'https://core.setoko-test.com'))
+      ..interceptors.add(CertificatePinningInterceptor(
+          allowedSHAFingerprints: _allowedSHAFingerprints));
 
-    // http.badCertificateCallback = (cert, host, port) {
-    //   print("!!!Bad certificate!!!");
-    //   return false;
-    // };
+    final link = Link.from([
+      DioLink(
+        '/v1/graphql',
+        client: _secureDioClient,
+      ),
+    ]);
 
-    // _httpClient = IOClient(http);
-
-    _secureHttpClient = SecureHttpClient.build(_allowedSHAFingerprints);
-
-    final httpLink = HttpLink(
-      'https://core.setoko-test.com/v1/graphql/',
-      httpClient: _secureHttpClient,
-    );
-
-    _gqlClient = GraphQLClient(
-      link: httpLink,
+    _secureGqlClient = GraphQLClient(
+      link: link,
       cache: GraphQLCache(),
     );
   }

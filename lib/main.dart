@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -13,8 +12,6 @@ const allowedSHAFingerprints =
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // final certData = await rootBundle.load('assets/facebook.com.pem');
   getIt.registerSingleton<Service>(Service([allowedSHAFingerprints]));
   runApp(const MyApp());
 }
@@ -60,7 +57,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _gqlCall() async {
     try {
-      final secureClient = GetIt.I<Service>().gqlClient;
+      final secureClient = GetIt.I<Service>().secureGqlClient;
       final options = QueryOptions(
         document: gql(homePageQuery),
       );
@@ -77,9 +74,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _apiCall() async {
     try {
-      final url = Uri.parse('https://core.setoko-test.com/ping');
-
-      final result = await GetIt.I<Service>().secureHttpClient.get(url);
+      final result = await GetIt.I<Service>().secureDioClient.get('/ping');
 
       if (result.statusCode == 200) {
         _showSnackbar('API Success');
